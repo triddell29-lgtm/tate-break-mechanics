@@ -63,7 +63,7 @@ export function createTateRenderer({ assetUrl, mountPoint = document.documentEle
     inset: '0',
     zIndex: 2147483646,
     backgroundImage: `url(${COVER_URL})`,
-    backgroundSize: 'contain',
+    backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundColor: '#0b1a1f',
