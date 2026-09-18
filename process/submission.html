@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: letter; margin: 0.65in; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #1c1c1c;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .cover {
+    height: 9.1in;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cover .kicker { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #8a8a8a; margin-bottom: 10px; }
+  .cover h1 { font-size: 34px; margin: 0 0 8px; }
+  .cover h2 { font-size: 16px; font-weight: 400; color: #444; margin: 0 0 40px; }
+  .cover .meta { font-size: 12px; color: #666; line-height: 1.9; border-top: 1px solid #ccc; padding-top: 16px; }
+  .cover .meta b { color: #1c1c1c; }
+  .cover .links { margin-top: 22px; font-size: 12.5px; }
+  .cover .links div { margin-bottom: 6px; }
+  .cover .links b { color: #3f8f8a; }
+
+  .section { page-break-before: always; }
+  .section-heading { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #3f8f8a; margin-bottom: 14px; font-weight: 700; }
+  h3 { font-size: 15px; margin: 22px 0 6px; color: #1c1c1c; }
+  h3:first-of-type { margin-top: 0; }
+  p { margin: 0 0 10px; }
+  code { background: #f2f2f2; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+  pre {
+    background: #12201d;
+    color: #d8f5f0;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    line-height: 1.5;
+    overflow: hidden;
+    white-space: pre-wrap;
+  }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 16px; font-size: 12px; }
+  th, td { border: 1px solid #ddd; padding: 7px 9px; text-align: left; vertical-align: top; }
+  th { background: #eef6f5; color: #1c1c1c; }
+  .qa dt { font-weight: 700; margin-top: 12px; }
+  .qa dd { margin: 3px 0 0; color: #333; }
+  .frame-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .frame-grid figure { width: 31%; margin: 0; }
+  .frame-grid img { width: 100%; display: block; border-radius: 4px; border: 1px solid #ddd; }
+  .frame-grid figcaption { font-size: 10px; color: #666; margin-top: 4px; text-align: center; }
+  .note {
+    background: #fff8e6;
+    border: 1px solid #f0dca0;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12px;
+    margin: 12px 0;
+  }
+  ol { padding-left: 20px; }
+  ol li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Everyday Tools &mdash; Tool Build (mechanics)</div>
+  <h1>Tate Break</h1>
+  <h2>Mechanics prototype, back-end architecture notes, and submission bundle</h2>
+  <div class="meta">
+    <div><b>Tool:</b> Tate Break</div>
+    <div><b>Module:</b> Everyday Tools &mdash; Summit on Human Dignity</div>
+    <div><b>Assignment:</b> Tool Build (mechanics)</div>
+    <div><b>Author:</b> Tate Riddell</div>
+  </div>
+  <div class="links">
+    <div><b>Live deployed link:</b> https://claude.ai/artifact/JBJwbkipTkLsmoyFoY6Ndo</div>
+    <div><b>GitHub repository:</b> tate-break-mechanics (see Submission Instructions, p. 6, for the one remaining manual step)</div>
+    <div><b>Screen recording:</b> tate-break-demo.mp4, 45 seconds &mdash; attached separately alongside this PDF</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-heading">What was built</div>
+  <p>
+    A standalone, dependency-free web prototype of Tate Break's actual
+    interruption mechanic &mdash; the same trigger-and-companion loop already
+    shipped as a working Chrome extension, rebuilt here with input, logic,
+    and output pulled apart into their own files, per this assignment's
+    architecture requirement.
+  </p>
+  <p><b>Core loop:</b> scroll a simulated feed. Tate appears once shortly
+  after the page loads, and again every fixed 10 scrolls. He walks on,
+  lies down, covers the feed, leads a 15-second breathing pause with
+  cycling cues, then gets up and leaves &mdash; the feed resumes exactly
+  where it was.</p>
+  <p><b>One clearly implemented core function:</b> the fixed scroll-count
+  trigger &rarr; on-screen companion break &rarr; automatic resume cycle.</p>
+  <p><b>Defined input:</b> mouse-wheel / trackpad scroll events on the
+  page. <b>Defined processing:</b> a three-state engine counting scrolls
+  toward a disclosed fixed target. <b>Defined output:</b> Tate's walk-on/
+  breathing/walk-off sequence plus an always-visible tally.</p>
+  <p><b>Visible choice point:</b> a small pill fixed to the top-right
+  corner ("Tate in N scrolls") shows the exact, real count at all times
+  &mdash; never hidden, never randomized &mdash; so the person always knows how
+  close the next interruption is before it happens.</p>
+</div>
+
+<div class="section">
+  <div class="section-heading">Architecture &mdash; input / logic / output</div>
+  <pre>src/input/scrollInput.js   INPUT LAYER
+src/logic/breakEngine.js   LOGIC LAYER
+src/output/tateRenderer.js OUTPUT LAYER
+main.js                    wiring only — no behavior of its own</pre>
+
+  <h3>Input layer &mdash; scrollInput.js</h3>
+  <p>Listens for raw <code>wheel</code> events and turns a noisy burst of
+  native events (one real scroll gesture can fire dozens in a few
+  milliseconds) into a single clean "a scroll happened" signal, using a
+  350ms gap to tell one gesture from the next. Knows nothing about Tate,
+  counting, or timers.</p>
+
+  <h3>Logic layer &mdash; breakEngine.js</h3>
+  <p>The actual state machine: a scroll counter, a fixed target (10), an
+  open-delay timer, and a break-duration timer. Two states &mdash;
+  <code>IDLE</code> (counting) and <code>BREAK_ACTIVE</code> (a break is
+  running; new scroll signals are ignored, not queued, until it ends). No
+  DOM references anywhere in this file &mdash; the same fixed-count design
+  already tested and shipped in the real extension's <code>content.js</code>,
+  lifted out of the browser entirely.</p>
+
+  <h3>Output layer &mdash; tateRenderer.js</h3>
+  <p>Everything about how it looks: the walk-on/lie-down/breathing/walk-off
+  sequence, the cover image, and the tally pill. Receives events from the
+  logic layer and never decides when those events happen.</p>
+
+  <h3>Wiring &mdash; main.js</h3>
+  <p>Creates one of each layer and connects them with plain callbacks. Also
+  builds the cosmetic simulated feed, which the mechanic doesn't actually
+  depend on &mdash; swap in a real feed and nothing else in the project needs
+  to change.</p>
+</div>
+
+<div class="section">
+  <div class="section-heading">Back-end thinking first</div>
+  <dl class="qa">
+    <dt>What data does this tool actually need to function?</dt>
+    <dd>One integer (scrolls since the last break) and one state flag (is
+    a break active). No user profile, no history of past sessions, no
+    record of what was being scrolled.</dd>
+
+    <dt>Where does that data need to live?</dt>
+    <dd>Nowhere outside the browser tab's own memory &mdash; plain JavaScript
+    variables closed over inside <code>createBreakEngine()</code>. Never
+    written to a file, a cookie, localStorage, or a server.</dd>
+
+    <dt>Does it need to be temporary or persistent?</dt>
+    <dd>Temporary, on purpose. Reloading the page resets the count to zero
+    and returns to <code>IDLE</code> &mdash; matching the shipped extension's
+    own documented behavior.</dd>
+
+    <dt>Does it need to remember anything across sessions?</dt>
+    <dd>No, by design. Remembering break history or "how many times you
+    needed this today" would turn a companion into a tracker, which the
+    tool's own Dignity Clause rules out.</dd>
+
+    <dt>Does this tool require any AI or inference?</dt>
+    <dd>No. Tate Break is a scripted, deterministic state machine &mdash; built
+    explicitly as a non-AI stand-in for a separate AI-companion project.
+    Nothing in this prototype calls a model.</dd>
+
+    <dt>How many API calls does this tool expect to make, and when?</dt>
+    <dd>Zero. There is no network layer anywhere in <code>src/</code> &mdash; no
+    fetch, no XHR, no analytics beacon.</dd>
+
+    <dt>What happens if an API call fails?</dt>
+    <dd>Not applicable today, since none exist &mdash; but the governing
+    principle for any future one is <b>fail open, never fail closed</b>: a
+    break tool that locked the feed on an error would violate its own
+    Refusal Clause ("never locks the feed permanently"). A future network
+    dependency would default to the last-known-good local config and let
+    scrolling continue rather than block on a failed request.</dd>
+  </dl>
+</div>
+
+<div class="section">
+  <div class="section-heading">Behavior integrity check</div>
+  <p>Cross-referenced against Tate Break's own <code>SYSTEM_CHARTER.md</code>
+  (written for the prior Interface Ritual Sketch submission, since Tate
+  Break branched off mid-module before a formal Tool Intent Statement
+  existed for it):</p>
+  <table>
+    <tr><th>Charter says</th><th>This prototype does</th></tr>
+    <tr>
+      <td>"Fires once shortly after the page opens, and then again every
+      10 scrolls&hellip; a fixed, disclosed number, not a hidden one."</td>
+      <td><code>openDelayMs: 1500</code> and <code>scrollTarget: 10</code>
+      in main.js, both plain constants, both shown via the tally pill.</td>
+    </tr>
+    <tr>
+      <td>"No&hellip; scroll history saved beyond the live count for the
+      current break cycle (which resets to zero the moment he appears)."</td>
+      <td><code>endBreak()</code> sets <code>scrollCount = 0</code> the
+      moment a break ends; nothing is written anywhere before that reset.</td>
+    </tr>
+    <tr>
+      <td>"Never locks the feed permanently&hellip; never nags outside its
+      one 15-second window."</td>
+      <td><code>BREAK_ACTIVE</code> always returns to <code>IDLE</code> on
+      a fixed timer &mdash; no code path leaves it active indefinitely.</td>
+    </tr>
+    <tr>
+      <td>"The trigger count is fixed at 10&hellip; it isn't hidden or
+      randomized."</td>
+      <td>The tally pill renders the real <code>scrollCount</code> /
+      <code>scrollTarget</code> values on every scroll.</td>
+    </tr>
+  </table>
+  <p>No gaps found between the stated charter and the built mechanic for
+  the one function this prototype implements. The charter's Notes/
+  Reminders/Goals hub is a separate feature of the full Chrome extension
+  and is intentionally out of scope here.</p>
+</div>
+
+<div class="section">
+  <div class="section-heading">Screen recording &mdash; storyboard</div>
+  <p>Full recording: <code>tate-break-demo.mp4</code>, 45 seconds (under
+  the 2-minute limit), attached alongside this PDF &mdash; a PDF page can't
+  play video, so the frames below are a storyboard of it, in order.</p>
+  <div class="frame-grid">
+    <figure><img src="video/frames/01-open-trigger-walk-on.png"><figcaption>0:02 &mdash; opens the page; Tate walks on 1.5s later, unprompted</figcaption></figure>
+    <figure><img src="video/frames/02-lie-down-breathing.png"><figcaption>0:04 &mdash; lies down, breathing cues begin</figcaption></figure>
+    <figure><img src="video/frames/03-tally-counting-scrolls.png"><figcaption>0:23 &mdash; scrolling the feed; tally reads "Tate in 3 scrolls"</figcaption></figure>
+    <figure><img src="video/frames/04-tenth-scroll-triggers.png"><figcaption>0:27 &mdash; the 10th scroll fires the second break</figcaption></figure>
+    <figure><img src="video/frames/05-second-break-breathing.png"><figcaption>0:30 &mdash; second break in progress, same sequence</figcaption></figure>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-heading">Submission instructions</div>
+  <p>Everything above was built with what's actually available in this
+  environment. One step needs to happen on your own machine, honestly
+  flagged rather than faked:</p>
+  <ol>
+    <li><b>Push the repo to GitHub.</b> A local git repository already
+    exists with 7 clean, sequential commits (input layer &rarr; logic layer
+    &rarr; output layer &rarr; wiring &rarr; assets &rarr; build scripts &rarr; README) in
+    the <code>tate-break-mechanics</code> folder on your Desktop. This
+    environment has no GitHub login and can't create one on your behalf,
+    so from a terminal in that folder: create a new empty repository on
+    github.com (no README/license, so it doesn't conflict), then run
+    <code>git remote add origin &lt;your-new-repo-url&gt;</code> and
+    <code>git push -u origin master</code>. The commit history will carry
+    over exactly as built.</li>
+    <li><b>Live link:</b> already deployed &mdash;
+    <code>https://claude.ai/artifact/JBJwbkipTkLsmoyFoY6Ndo</code>. No
+    action needed unless your instructor requires a GitHub Pages URL
+    specifically, in which case GitHub's own Pages setting (Settings &rarr;
+    Pages &rarr; deploy from <code>master</code>) will serve
+    <code>index.html</code> directly once the repo is pushed.</li>
+    <li><b>Submit this PDF</b> plus <code>tate-break-demo.mp4</code> as
+    two attachments (or one zip, if your LMS prefers a single upload) to
+    the assignment.</li>
+  </ol>
+  <div class="note">
+    Why this one step is manual: this environment is not signed into any
+    GitHub account, and creating an account or entering credentials on
+    your behalf isn't something it does &mdash; the repo, its commit history,
+    and everything else are done; only the login-gated push is left to
+    you.
+  </div>
+</div>
+
+</body>
+</html>
