@@ -33,11 +33,15 @@ src/output/tateRenderer.js OUTPUT LAYER
 main.js                    wiring only — no behavior of its own
 ```
 
-**Input layer** (`scrollInput.js`) — Listens for raw `wheel` events on a
-target and turns a noisy burst of native events (a single real-world
-scroll gesture can fire dozens of `wheel` events in a few milliseconds)
-into one clean "a scroll happened" signal, using a 350ms gap to tell one
-gesture from the next. It knows nothing about Tate, counting, or timers.
+**Input layer** (`scrollInput.js`) — Listens for native `scroll` events on
+a target (so wheel, trackpad, keyboard, and scrollbar-drag input all
+count — see the break log below for why it isn't just `wheel`) and turns
+a noisy burst of native events (a single real-world scroll gesture can
+fire dozens of events in a few milliseconds) into one clean "a scroll
+happened" signal, using a 350ms gap to tell one gesture from the next,
+while still counting again if that gesture is held long enough to
+deserve more than one (also in the break log). It knows nothing about
+Tate, counting, or timers.
 
 **Logic layer** (`breakEngine.js`) — The actual state machine: a scroll
 counter, a fixed target (10), an open-delay timer, and a break-duration
@@ -150,6 +154,50 @@ the on-screen break). The charter's Notes/Reminders/Goals hub is a
 separate feature of the full Chrome extension and is intentionally out of
 scope for this mechanics prototype, which targets the core interrupting
 behavior only.
+
+## Break Log
+
+Three real breaks, found by actually trying to defeat the mechanic instead
+of just reading the code. The first two were fixed together in one commit
+to `src/input/scrollInput.js`; the third in its own commit to
+`src/output/tateRenderer.js`:
+
+**2026-09-24 — `352893b`** — Pressing Page Down (or dragging the scrollbar
+thumb) never moved the tally at all. The input layer only listened for
+native `wheel` events, so any scroll that didn't come from a mouse wheel
+or trackpad produced zero signal — a keyboard-only user could scroll
+straight through the whole feed and the break would never trigger, a
+direct miss against "does this system interrupt where you claimed it
+would." Confirmed with Playwright (12x `PageDown`, tally unchanged), then
+switched the listener from `wheel` to the native `scroll` event, which
+fires for every scroll input method. Re-ran the same test after: the
+tally now moves.
+
+**2026-09-24 — `352893b`** — Holding down one continuous scroll gesture
+for a full 3 real seconds (roughly 50 events, each well under the 350ms
+burst-gap) only ever moved the tally by 1 — identical to a single quick
+flick. The de-noise logic compared each event only to the *previous*
+event, so an unbroken gesture never produced a gap bigger than
+`burstGapMs` and got folded into one logical scroll no matter how long it
+ran. That's a real way to defeat the trigger: never lift your finger and
+the count never climbs. Fixed by also tracking when a scroll was last
+*counted* (not just last *seen*), so a held gesture counts again every
+350ms of continuous motion instead of freezing at 1. Verified: the same
+3-second hold now moves the tally by 8.
+
+**2026-09-24 — `1e3ce8a`** — At a 380px-wide viewport (a phone-width
+browser window), Tate's on-screen wrapper measured `left: 228px,
+right: 628px` against a 380px-wide window — almost 250px past the right
+edge, completely invisible, and the breathing invitation above him went
+with him. `REST_LEFT_VW` fixed his resting spot at 60% of viewport
+*width*, and his height was only ever capped by a pixel value and
+viewport *height* — never by viewport width — so a narrow screen pushed
+both his position and his size off-screen at once. Added a 640px
+breakpoint: below it he rests much closer to the left edge and his
+height is also capped by viewport width, so he shrinks with the screen
+instead of staying fixed size. Verified with a screenshot at 380px wide:
+the breathing pulse and "Take a breath" label are both now fully on
+screen, and desktop width (1000px, tested for regression) is unchanged.
 
 ## Attribution
 
