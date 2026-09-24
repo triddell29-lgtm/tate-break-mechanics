@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: letter; margin: 0.65in; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #1c1c1c;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .cover {
+    height: 9.1in;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .cover .kicker { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #8a8a8a; margin-bottom: 10px; }
+  .cover h1 { font-size: 34px; margin: 0 0 8px; }
+  .cover h2 { font-size: 16px; font-weight: 400; color: #444; margin: 0 0 40px; }
+  .cover .meta { font-size: 12px; color: #666; line-height: 1.9; border-top: 1px solid #ccc; padding-top: 16px; }
+  .cover .meta b { color: #1c1c1c; }
+  .cover .links { margin-top: 22px; font-size: 12.5px; }
+  .cover .links div { margin-bottom: 6px; }
+  .cover .links b { color: #3f8f8a; }
+
+  .section { page-break-before: always; }
+  .section-heading { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #3f8f8a; margin-bottom: 14px; font-weight: 700; }
+  h3 { font-size: 15px; margin: 22px 0 6px; color: #1c1c1c; }
+  h3:first-of-type { margin-top: 0; }
+  p { margin: 0 0 10px; }
+  code { background: #f2f2f2; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+  pre {
+    background: #12201d;
+    color: #d8f5f0;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    line-height: 1.5;
+    overflow: hidden;
+    white-space: pre-wrap;
+  }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0 16px; font-size: 12px; }
+  th, td { border: 1px solid #ddd; padding: 7px 9px; text-align: left; vertical-align: top; }
+  th { background: #eef6f5; color: #1c1c1c; }
+  .qa dt { font-weight: 700; margin-top: 12px; }
+  .qa dd { margin: 3px 0 0; color: #333; }
+  .frame-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .frame-grid figure { width: 31%; margin: 0; }
+  .frame-grid img { width: 100%; display: block; border-radius: 4px; border: 1px solid #ddd; }
+  .frame-grid figcaption { font-size: 10px; color: #666; margin-top: 4px; text-align: center; }
+  .frame-full { margin: 10px 0 16px; page-break-inside: avoid; }
+  .frame-full img { width: 100%; display: block; border-radius: 4px; border: 1px solid #ddd; }
+  .frame-full figcaption { font-size: 11px; color: #666; margin-top: 6px; text-align: center; }
+  .frame-full.tall { text-align: center; }
+  .frame-full.tall img { width: 46%; margin: 0 auto; }
+  .note {
+    background: #fff8e6;
+    border: 1px solid #f0dca0;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12px;
+    margin: 12px 0;
+  }
+  .audit { background: #f2f8f7; border: 1px solid #cfe6e3; border-radius: 6px; padding: 10px 12px; margin: 8px 0; }
+  .audit b.pass { color: #2b7a6f; }
+  ol { padding-left: 20px; }
+  ol li { margin-bottom: 6px; }
+  .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: middle; margin-right: 6px; border: 1px solid rgba(0,0,0,0.15); }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker">Everyday Tools &mdash; Tool Build (instrument + atmosphere)</div>
+  <h1>Tate Break</h1>
+  <h2>Atmosphere refinement of the Companion direction &mdash; typography, spacing, color, and motion</h2>
+  <div class="meta">
+    <div><b>Tool:</b> Tate Break</div>
+    <div><b>Module:</b> Everyday Tools &mdash; Summit on Human Dignity</div>
+    <div><b>Assignment:</b> Tool Build (instrument + atmosphere)</div>
+    <div><b>Direction refined:</b> Companion (chosen in Interface Ritual Sketch)</div>
+    <div><b>Author:</b> Tate Riddell</div>
+  </div>
+  <div class="links">
+    <div><b>Live deployed link (updated):</b> https://claude.ai/artifact/JBJwbkipTkLsmoyFoY6Ndo</div>
+    <div><b>GitHub repository (updated):</b> https://github.com/triddell29-lgtm/tate-break-mechanics</div>
+    <div><b>Video reflection:</b> atmosphere-pass-reflection.mp4, 42 seconds &mdash; attached separately alongside this PDF</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-heading">What this pass changed</div>
+  <p>
+    The previous submission (Tool Build &mdash; mechanics) built the trigger-and-companion
+    loop itself: a fixed 10-scroll count, a 15-second breathing hold, an always-visible
+    tally. Mechanics were frozen for this pass on purpose &mdash; nothing about
+    <i>when</i> or <i>why</i> Tate appears changed. This pass only touches
+    <i>how the breathing moment looks and moves</i>, working from the Companion
+    direction's own charter language:
+  </p>
+  <p style="margin:10px 0 4px; padding:10px 12px; background:#f7f7f5; border-left:3px solid #3f8f8a; font-style:italic; color:#333;">
+    "Warm and domestic, not clinical. A friend stopping by for fifteen seconds, not a
+    system flagging behavior. The hub's 'room' reinforces that tone outside of the
+    break moment too &mdash; it's a place, not a dashboard."
+    <div style="font-style:normal; font-size:11px; color:#888; margin-top:4px;">&mdash; SYSTEM_CHARTER.md, Section 7 (Atmospheric Tone)</div>
+  </p>
+  <p>Four dimensions were refined, each described in detail below: typography,
+  spatial rhythm, color strategy, and motion + timing. A Dignity Audit at the end
+  confirms none of them touch the one element this tool is not allowed to soften:
+  the exact, disclosed scroll tally.</p>
+</div>
+
+<div class="section">
+  <div class="section-heading">Refinement pass &mdash; before/after interface frames</div>
+  <p>
+    Before touching code, the Companion direction's existing frame (from the
+    Interface Ritual Sketch submission) was refined as a set of annotated interface
+    frames &mdash; rendered mockups in the same wireframe visual language as that
+    submission's direction sketches (cream background, black phone frame, wide-tracked
+    small-caps labels), not literal software exports. The frames below document the
+    typography, spacing, and color decisions before they were implemented in
+    <code>tateRenderer.js</code> / <code>content.js</code>.
+  </p>
+  <div class="frame-full tall">
+    <img src="screenshots/companion-refined.png">
+    <figcaption>Refined frame &mdash; the Companion breathing moment, annotated with the four changes below.</figcaption>
+  </div>
+  <div class="frame-full">
+    <img src="screenshots/signature-interaction-refined.png">
+    <figcaption>The same 5-state signature interaction from the original submission, atmosphere applied to states 3&ndash;4. States 1, 2, and 5 (the tally) are drawn identically on purpose &mdash; they're the states this pass isn't allowed to touch.</figcaption>
+  </div>
+  <div class="frame-full">
+    <img src="screenshots/implemented-breathing-moment.png">
+    <figcaption>The refined frames as actually implemented and running in the mechanics prototype (Playwright screenshot, not a mockup).</figcaption>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-heading">Typography</div>
+  <p><b>Before:</b> every string in the tool, instrumental or not, used the same
+  system-ui stack (<code>-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
+  sans-serif</code>) at a plain 13px.</p>
+  <p><b>After:</b> Tate's own words &mdash; the breathing label and cycling cues &mdash;
+  move to <b>Poppins</b> (weight 500, 14px), a rounder, warmer geometric sans reserved
+  only for his voice. Everything instrumental (the tally pill, the feed, post text)
+  stays on the neutral system-ui stack. The split itself is the point: a companion's
+  words get a different, warmer typeface than the interface reporting a number.</p>
+  <p>Poppins ships with no network dependency: the two weights actually used were
+  subset to just the glyphs in the tool's own strings (Regular and Medium, ~7KB each
+  after subsetting) and embedded as base64 <code>data:</code> URIs inside a single
+  <code>@font-face</code> rule &mdash; the same inlining pattern the build already used
+  for images, and one that works identically inside the Chrome extension's
+  content-script-injected <code>&lt;style&gt;</code> tag, where a live Google Fonts
+  stylesheet request could be blocked by a strict third-party site CSP.</p>
+</div>
+
+<div class="section">
+  <div class="section-heading">Spatial rhythm</div>
+  <table>
+    <tr><th>Element</th><th>Before</th><th>After</th></tr>
+    <tr><td>Gap between Tate and the breathing UI</td><td>18px</td><td>28px</td></tr>
+    <tr><td>Breathing label padding</td><td>4px 10px</td><td>6px 14px</td></tr>
+    <tr><td>Breathing pulse diameter</td><td>46px</td><td>52px, plus a 140px soft glow behind it</td></tr>
+  </table>
+  <p>More room around the one moment the tool asks you to slow down for &mdash; the
+  spacing itself is meant to read as unhurried, not just the wording.</p>
+</div>
+
+<div class="section">
+  <div class="section-heading">Color strategy</div>
+  <p>The tool now runs two accents with two different jobs, instead of one accent
+  used everywhere:</p>
+  <p>
+    <span class="swatch" style="background:#3f8f8a;"></span>
+    <b>Teal (#3f8f8a)</b> &mdash; unchanged, reserved for <i>instrument</i> UI: the tally
+    pill, the feed's avatar gradient. Nothing here is allowed to look warmer or
+    friendlier than a plain instrument should &mdash; that neutrality is what keeps the
+    tally honest.
+  </p>
+  <p>
+    <span class="swatch" style="background:#e8b872;"></span>
+    <b>Amber (#e8b872, new)</b> &mdash; reserved for <i>companion presence</i> UI: the
+    breathing pulse, its glow, and the cue label. Chosen to sit in the same warm
+    family as the hub's own room (its cream panel background and dark-brown
+    border/button in <code>hub.css</code> are the same lamp-lit palette), so the
+    15-second break and the hub feel like one place rather than two different tools.
+  </p>
+  <p>The rule is deliberately one-directional: warmth was added to the companion
+  moment, and nothing was added to (or taken from) the instrument moment. That
+  asymmetry is the actual design decision, not an oversight.</p>
+</div>
+
+<div class="section">
+  <div class="section-heading">Motion + timing</div>
+  <table>
+    <tr><th>What</th><th>Before</th><th>After</th></tr>
+    <tr><td>Walk-on</td><td>Linear interpolation</td><td>Ease-out cubic &mdash; Tate arrives and settles, rather than stopping dead</td></tr>
+    <tr><td>Walk-off</td><td>Linear interpolation</td><td>Ease-in cubic &mdash; he drifts off, rather than snapping into motion</td></tr>
+    <tr><td>Arrival &rarr; invitation</td><td>Breathing UI appears the instant lean-down finishes</td><td>A new 300ms still beat first &mdash; he settles in before the invitation appears</td></tr>
+    <tr><td>Cue changes</td><td>Instant <code>textContent</code> swap every 2s</td><td>350ms crossfade (fade out, swap, fade in) &mdash; cues feel spoken, not printed</td></tr>
+    <tr><td>Breathing UI fade-in</td><td>0.6s</td><td>0.8s</td></tr>
+  </table>
+  <p>None of these change the break's timing budget: the same fixed 15-second hold
+  is still fully accounted for in <code>playBreak()</code>'s sleep math, with the new
+  300ms pause subtracted from the hold the same way the walk and lean durations
+  already were.</p>
+</div>
+
+<div class="section">
+  <div class="section-heading">Dignity Audit</div>
+  <p>A self-check against the Companion direction's own Dignity and Refusal Clauses,
+  run specifically because this pass touched colors, spacing, and timing &mdash; the
+  exact surface area those clauses exist to guard.</p>
+  <div class="audit"><b class="pass">PASS</b> &mdash; The tally (<code>#tate-tally</code>) is visually untouched: same neutral background, same font stack, same exact number. It was not given the new amber accent, and its font-weight was left at 600 rather than being "prettied up."</div>
+  <div class="audit"><b class="pass">PASS</b> &mdash; No streaks, scores, or shaming colors were introduced. The new amber is warm, not alarming, and is never used to signal "you scrolled too much."</div>
+  <div class="audit"><b class="pass">PASS</b> &mdash; No new persistence. The atmosphere pass added zero new state; <code>scrollCount</code> still resets to zero the instant a break ends, exactly as before.</div>
+  <div class="audit"><b class="pass">PASS</b> &mdash; The trigger count is still fixed at 10 and still fully disclosed via the tally; nothing about the new arrival pause or crossfade hides or delays that number updating.</div>
+  <div class="audit"><b class="pass">PASS</b> &mdash; The break still cannot lock the feed permanently or run outside its window: the 300ms pause and 350ms crossfades are subtracted from, not added on top of, the fixed 15-second <code>breakDurationMs</code> budget.</div>
+</div>
+
+<div class="section">
+  <div class="section-heading">Where it's implemented</div>
+  <p>Refined identically in both places the Companion breathing moment exists, so the
+  mechanics prototype and the real shipped extension stay visually consistent:</p>
+  <table>
+    <tr><th>File</th><th>Project</th><th>What changed</th></tr>
+    <tr><td><code>src/output/tateRenderer.js</code></td><td>Mechanics prototype</td><td>Easing helpers, arrival pause, cue crossfade, amber/glow/Poppins styling</td></tr>
+    <tr><td><code>style.css</code> / <code>build_for_artifact_tool.py</code></td><td>Mechanics prototype</td><td>@font-face + color variables (kept in sync across both the live-preview CSS and the Artifact-tool build's duplicated CSS string)</td></tr>
+    <tr><td><code>content.js</code></td><td>Real Chrome extension</td><td>Same easing/pause/crossfade/amber treatment, same CSP-safe base64 font embedding inside the injected <code>&lt;style&gt;</code> tag</td></tr>
+  </table>
+  <p class="note">The extension's <code>content.js</code> has no on-page tally at all
+  today (it only logs the count to the console) &mdash; that gap predates this pass and
+  is a mechanics question, not an atmosphere one, so it was left alone rather than
+  patched in as a side effect of this assignment.</p>
+</div>
+
+<div class="section">
+  <div class="section-heading">Video reflection &mdash; storyboard</div>
+  <p>Full video: <code>atmosphere-pass-reflection.mp4</code>, 42 seconds (under the
+  2-minute limit), attached alongside this PDF. No spoken narration &mdash; on-screen
+  text throughout, matching the prior submission's format. Both live clips are real
+  Playwright recordings of the actual running prototype (before = the mechanics-only
+  build at commit <code>71d274b</code>; after = this pass), not mockups.</p>
+  <ol>
+    <li><b>0:00&ndash;0:03</b> &mdash; title card: "Instrument + Atmosphere."</li>
+    <li><b>0:03&ndash;0:16.5</b> &mdash; "BEFORE" label, then a live clip of the breathing moment exactly as shipped in the mechanics submission (white pulse, system font, instant cue swaps).</li>
+    <li><b>0:16.5&ndash;0:30</b> &mdash; "AFTER" label, then the same moment with the atmosphere pass applied (amber glow, Poppins label, eased arrival).</li>
+    <li><b>0:30&ndash;0:36</b> &mdash; <b>Reflection, question 1</b> &mdash; on-screen text: "What changed from mechanics to atmosphere?" followed by the typography / color / spacing / motion summary above.</li>
+    <li><b>0:36&ndash;0:42</b> &mdash; <b>Reflection, question 2</b> &mdash; on-screen text: "How did those changes shift the emotional experience?" followed by: the mechanics version was legible but a little clinical; the arrival pause and crossfading cues make the moment feel spoken-to rather than triggered; the shared amber ties the break to the hub's own room; and the tally was deliberately left exactly as plain as before, because warming up the companion moment while leaving the instrument moment alone was the actual design decision this pass is arguing for.</li>
+  </ol>
+</div>
+
+</body>
+</html>
