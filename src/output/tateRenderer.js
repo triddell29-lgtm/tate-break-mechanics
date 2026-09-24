@@ -23,6 +23,30 @@ const LEAN_UP_MS = 500;
 const REST_LEFT_VW = 60;
 const MEDITATION_CUES = ['Breathe in...', 'and out...', "You're doing fine.", 'Breathe in...', 'and out...'];
 
+// REST_LEFT_VW positions Tate's LEFT edge at 60% of the viewport width, and
+// his height (min(560px, 58vh)) was never bounded by viewport WIDTH at
+// all - only by a fixed pixel cap and viewport height. On a narrow (phone-
+// width) viewport that combination pushes him hundreds of pixels past the
+// right edge, off-screen, and the breathing invitation above him goes with
+// him - the one required "visible choice point" plus the companion moment
+// both effectively disappear (see the README break log, 2026-09-24).
+// Below this breakpoint, rest further left and cap his size by viewport
+// width too, so the whole thing stays on screen instead of just on desktop.
+const NARROW_VIEWPORT_PX = 640;
+const NARROW_REST_LEFT_VW = 6;
+
+function isNarrowViewport() {
+  return window.innerWidth < NARROW_VIEWPORT_PX;
+}
+
+function getRestLeftVw() {
+  return isNarrowViewport() ? NARROW_REST_LEFT_VW : REST_LEFT_VW;
+}
+
+function getCharHeightCss() {
+  return isNarrowViewport() ? 'min(320px, 46vh, 62vw)' : 'min(560px, 58vh)';
+}
+
 // Atmosphere pass: a short, deliberate beat between "Tate has arrived" and
 // "the breathing UI appears," and a crossfade duration for each cue change.
 // Both are here (not buried in playBreak) so the timing budget in
@@ -98,7 +122,7 @@ export function createTateRenderer({ assetUrl, mountPoint = document.documentEle
     bottom: '0px',
     left: '105vw',
     zIndex: 2147483647,
-    height: 'min(560px, 58vh)',
+    height: getCharHeightCss(),
     width: 'auto',
     pointerEvents: 'none',
   });
@@ -239,6 +263,12 @@ export function createTateRenderer({ assetUrl, mountPoint = document.documentEle
 
   // ---- The full on-screen sequence, driven by logic-layer events ---------
   async function playBreak(durationMs) {
+    // Recomputed on every break, not just once at mount, so a window
+    // resized between breaks (or opened narrow to begin with) still gets
+    // sized and positioned to fit.
+    charWrap.style.height = getCharHeightCss();
+    const restLeftVw = getRestLeftVw();
+
     mountPoint.appendChild(coverEl);
     mountPoint.appendChild(charWrap);
     requestAnimationFrame(() => { coverEl.style.opacity = '1'; });
@@ -248,7 +278,7 @@ export function createTateRenderer({ assetUrl, mountPoint = document.documentEle
 
     setFacing(false);
     const stopWalkIn = startFrameCycle(WALK_FRAMES, WALK_FPS);
-    await tweenLeft(105, REST_LEFT_VW, WALK_MS, easeOutCubic);
+    await tweenLeft(105, restLeftVw, WALK_MS, easeOutCubic);
     stopWalkIn();
 
     await playFrameSequence(LEAN_FRAMES, LEAN_DOWN_MS);
@@ -277,7 +307,7 @@ export function createTateRenderer({ assetUrl, mountPoint = document.documentEle
 
     setFacing(true);
     const stopWalkOut = startFrameCycle(WALK_FRAMES, WALK_FPS);
-    await tweenLeft(REST_LEFT_VW, 105, WALK_MS, easeInCubic);
+    await tweenLeft(restLeftVw, 105, WALK_MS, easeInCubic);
     stopWalkOut();
 
     coverEl.style.opacity = '0';
